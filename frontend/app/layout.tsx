@@ -1,3 +1,4 @@
+import Footer from './components/Footer'
 import Providers from './components/Providers'
 import Topbar from './components/Topbar'
 import './globals.css'
@@ -21,6 +22,7 @@ export default function RootLayout({
         <Providers>
           <Topbar />
           {children}
+          <Footer />
         </Providers>
       </body>
     </html>
