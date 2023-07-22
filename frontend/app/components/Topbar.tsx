@@ -11,14 +11,9 @@ const Topbar = () => {
     return (
       <header className="flex flex-row gap-4 w-full items-center bg-white dark:bg-black">
         <Image src={Logo} alt="here was a logo:(" className="h-20" />
-        <Image
-          src={session.user.image as string}
-          alt={session.user.name as string}
-          width={100}
-          height={100}
-          className="rounded-full h-14 w-14"
-        />
+        <p>{session.user.email}</p>
         <button onClick={() => signOut()} className="items-end">Sign Out</button>
+        <button onClick={() => console.log(session)}>Console</button>
       </header>
     )
   }
