@@ -3,3 +3,6 @@
 
 # Emit folder
 /dist
+
+# env file
+.env
