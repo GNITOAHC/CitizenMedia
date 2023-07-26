@@ -2,7 +2,9 @@ import express from 'express'
 import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
-import { User, LoginType } from '../models'
+import crypto from 'crypto'
+import { User, LoginType, Token } from '../models'
+import { sendMail, resetPassword } from './auth.utils'
 
 const router = express.Router()
 
@@ -144,6 +146,40 @@ router.get('/verify', (req, res) => {
       return res.send({ verified: true })
     }
   })
+})
+
+router.post('/forget-password', async (req, res) => {
+  /*
+   * req.body = {
+   * email: string
+   * }
+   */
+  const user = await User.findOne({ email: req.body.email })
+  if (!user) return res.status(404).send({ message: 'User not found' })
+  let token = await Token.findOne({ userId: user._id })
+  if (token) await token.deleteOne() // Delete existing token if exists
+
+  let resetToken = crypto.randomBytes(32).toString('hex')
+  await new Token({
+    userId: user._id,
+    email: user.email,
+    token: resetToken,
+    createdAt: Date.now(),
+  }).save()
+  const link = `http://localhost:3000/reset-pass?token=${resetToken}&id=${user._id}`
+  await sendMail(user.email, `Please reset your password here ${link}`)
+  return res.status(200).send({ resetToken: resetToken, id: user._id })
+})
+
+router.post('/reset-password', async (req, res) => {
+  /* resetPassword(id, password, token) */
+  const result = await resetPassword(
+    req.body.id,
+    req.body.password,
+    req.body.token
+  )
+  if (result.error) return res.status(500).send({ message: result.error })
+  res.status(200).send({ message: result.message })
 })
 
 export default router

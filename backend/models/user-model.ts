@@ -1,5 +1,4 @@
-import mongoose from 'mongoose'
-import { Model, Schema } from 'mongoose'
+import mongoose, { Model, Schema } from 'mongoose'
 import bcrypt from 'bcrypt'
 import { IUser, IUserMethods, LoginType } from './IUserInterface'
 
