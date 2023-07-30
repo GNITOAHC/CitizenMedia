@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer'
 import bcrypt from 'bcrypt'
-import { User, Token } from '../models'
+import { User, Token } from '@/models'
 
 const MAIL_HOST = process.env.MAIL_HOST
 const MAIL_USER = process.env.MAIL_USER

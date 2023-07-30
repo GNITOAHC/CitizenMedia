@@ -3,7 +3,7 @@ import axios from 'axios'
 import jwt from 'jsonwebtoken'
 import 'dotenv/config'
 import crypto from 'crypto'
-import { User, LoginType, Token } from '../models'
+import { User, LoginType, Token } from '@/models'
 import { sendMail, resetPassword } from './auth.utils'
 
 const router = express.Router()

@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import cors from 'cors'
+require('module-alias/register') // Required for module aliasing
 const app = express()
 
 /* Not sure if this is needed but too scared to remove it */
