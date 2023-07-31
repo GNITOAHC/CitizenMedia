@@ -23,6 +23,10 @@ app.get('/', (_req, res) => {
 import { authRoute } from './routes'
 app.use('/auth', authRoute)
 
+import { storyRoute } from './routes'
+import {jwt_protect} from './routes' // Require Headers Authorization
+app.use('/story', jwt_protect, storyRoute)
+
 app.listen(8080, () => {
   console.log('Listening on port 8080')
 })

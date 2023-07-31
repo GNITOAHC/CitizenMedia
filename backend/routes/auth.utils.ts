@@ -56,3 +56,32 @@ export async function resetPassword(
 
   return { message: 'Password reset successfully' }
 }
+
+import express from 'express'
+import jwt from 'jsonwebtoken'
+const JWT_SECRET = process.env.JWT_SECRET as string
+if (!JWT_SECRET || JWT_SECRET == '') {
+  throw new Error('JWT_SECRET not defined')
+}
+export function jwt_protect(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  console.log('Checking JWT')
+  if (!req.headers.authorization)
+    return res.send({ message: 'No token provided', verified: false })
+
+  const token = (req.headers.authorization as string).split(' ')[1]
+  jwt.verify(token, JWT_SECRET, (err, _decoded) => {
+    if (err) {
+      /* console.log(err) */
+      if (err.name == 'TokenExpiredError') {
+        console.log('Token expired')
+      }
+      return res.send({ verified: false })
+    } else {
+      next()
+    }
+  })
+}
