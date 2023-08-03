@@ -23,61 +23,58 @@ if (!JWT_SECRET || JWT_SECRET == '') {
 }
 
 router.post('/google', async (req, res) => {
-  async function check(id_token: string) {
-    try {
-      const { data } = await axios.get(
-        `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`
-      )
-      if (data['email_verified'] == 'true') {
-        console.log('Email verified')
-        const foundUser = await User.findOne({ email: data['email'] })
-        if (!foundUser) {
-          /* Create new user if not found */
-          try {
-            const newUser = new User({
-              username: data['name'],
-              email: data['email'],
-              loginTypes: LoginType.GOOGLE,
-            })
-            newUser.save()
-          } catch (err) {
-            console.log(err)
-          }
-        }
-
-        const jwt_token = jwt.sign(
-          {
-            name: data['name'],
-            email: data['email'],
-            image: data['picture'],
-          },
-          JWT_SECRET,
-          { expiresIn: '180d' } // 180 days
-        )
-        return {
-          user: {
-            email: data['email'],
-            name: data['name'],
-            image: data['picture'],
-            jwt_token: jwt_token,
-          },
-        }
-      } else {
-        /* console.log('Email not verified') */
-        return null
+  const id_token = req.body.id_token
+  const { data } = await axios.get(
+    `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${id_token}`
+  )
+  if (data['email_verified'] == 'true') {
+    console.log('Email verified')
+    const foundUser = await User.findOne({
+      email: data['email'],
+      loginTypes: LoginType.GOOGLE,
+    })
+    if (!foundUser) {
+      /* Create new user if not found */
+      try {
+        const newUser = new User({
+          username: data['name'],
+          email: data['email'],
+          loginTypes: LoginType.GOOGLE,
+        })
+        newUser.save()
+      } catch (err) {
+        console.log(err)
       }
-    } catch (error) {
-      /* console.log(error) */
-      return null
     }
-  }
 
-  check(req.body.id_token).then((resp) => res.status(200).send(resp))
+    const jwt_token = jwt.sign(
+      {
+        name: data['name'],
+        email: data['email'],
+        image: data['picture'],
+      },
+      JWT_SECRET,
+      { expiresIn: '180d' } // 180 days
+    )
+    return res.status(200).send({
+      user: {
+        name: data['name'],
+        email: data['email'],
+        image: data['picture'],
+        jwt_token: jwt_token,
+      },
+    })
+  } else {
+    return res.status(401).send({ message: 'Email not verified' })
+  }
 })
 
 router.post('/credentials', async (req, res) => {
   /* Check if user exists in database */
-  let foundUser = await User.findOne({ email: req.body.email })
+  let foundUser = await User.findOne({
+    email: req.body.email,
+    loginTypes: LoginType.CREDENTIALS,
+  })
 
   if (!foundUser) {
     return res.status(401).send({ message: 'User does not exist' })
@@ -155,7 +152,7 @@ router.post('/forget-password', async (req, res) => {
    * }
    */
   const user = await User.findOne({ email: req.body.email })
-  if (!user) return res.status(404).send({ message: 'User not found' })
+  if (!user) return res.status(200).send({ message: 'User not found' }) // status 200 because Nextjs expects 200
   let token = await Token.findOne({ userId: user._id })
   if (token) await token.deleteOne() // Delete existing token if exists
 
@@ -166,7 +163,7 @@ router.post('/forget-password', async (req, res) => {
     token: resetToken,
     createdAt: Date.now(),
   }).save()
-  const link = `http://localhost:3000/reset-pass?token=${resetToken}&id=${user._id}`
+  const link = `http://localhost:3000/auth/reset-pass?token=${resetToken}&id=${user._id}`
   await sendMail(user.email, `Please reset your password here ${link}`)
   return res.status(200).send({ resetToken: resetToken, id: user._id })
 })
