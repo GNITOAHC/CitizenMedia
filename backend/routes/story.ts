@@ -1,5 +1,6 @@
 import express from 'express'
 import { User, Story } from '@/models'
+import { jwt_protect } from './auth.utils' // Require Headers Authorization
 const router = express.Router()
 
 router.use((_req, _res, next) => {
@@ -7,7 +8,35 @@ router.use((_req, _res, next) => {
   next()
 })
 
-router.post('/create', async (req, res) => {
+router.post('/retrieveById', async (req, res) => {
+  /*
+   * req.body = {
+   *  id: string, // The id of the Story
+   * }
+   */
+  const story = await Story.findOne({ _id: req.body.id })
+  console.log(story)
+  if (!story) return res.status(400).send('Story not found')
+  return res.status(200).send(story)
+})
+
+router.post('/retrieve', jwt_protect, async (req, res) => {
+  /*
+   * req.body = {
+   *  id: string, // The id of the user
+   * }
+   */
+  console.log('Retrieving stories')
+  console.log(req.body)
+  const user = await User.findOne({ _id: req.body.id })
+  if (!user) return res.status(400).send('User not found')
+  console.log(user)
+  const stories = await Story.find({ _id: { $in: user.myStories } })
+  console.log(stories)
+  res.status(200).send(stories)
+})
+
+router.post('/create', jwt_protect, async (req, res) => {
   /*
    * req.body = {
    *  id: string,
@@ -41,7 +70,7 @@ router.post('/create', async (req, res) => {
   return res.status(200).send('Story created')
 })
 
-router.post('/comment', async (req, res) => {
+router.post('/comment', jwt_protect, async (req, res) => {
   /*
    * req.body = {
    * id: Types.ObjectId, // The id of the story
