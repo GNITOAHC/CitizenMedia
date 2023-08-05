@@ -56,6 +56,7 @@ export const options: NextAuthOptions = {
           })
         if (res && res.status == 200) {
           account.user = res.data.user as User
+          account.user.jwt_token = 'Bearer ' + res.data.user.jwt_token
           return true
         } else return false
       } else if (account && account.provider === 'credentials') {

@@ -17,4 +17,10 @@ declare module 'next-auth' {
     id?: string
     jwt_token?: string
   }
+  interface Account {
+    user: {
+      id?: string
+      jwt_token?: string
+    }
+  }
 }
