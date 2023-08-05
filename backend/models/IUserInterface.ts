@@ -11,6 +11,7 @@ export interface IUser extends mongoose.Document {
   email: string
   password: string
   loginTypes: LoginType
+  myStories: mongoose.Types.ObjectId[]
   date: Date
 }
 

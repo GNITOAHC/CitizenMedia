@@ -52,6 +52,7 @@ router.post('/google', async (req, res) => {
         name: data['name'],
         email: data['email'],
         image: data['picture'],
+        id: foundUser?._id,
       },
       JWT_SECRET,
       { expiresIn: '180d' } // 180 days
@@ -62,6 +63,7 @@ router.post('/google', async (req, res) => {
         email: data['email'],
         image: data['picture'],
         jwt_token: jwt_token,
+        id: foundUser?._id,
       },
     })
   } else {
@@ -100,13 +102,17 @@ router.post('/credentials', async (req, res) => {
       name: foundUser?.username,
       email: foundUser?.email,
       jwt_token: jwt_token,
+      id: foundUser?._id,
     })
   })
 })
 
 router.post('/register', async (req, res) => {
   /* Check if user exists in database */
-  let foundUser = await User.findOne({ email: req.body.email })
+  let foundUser = await User.findOne({
+    email: req.body.email,
+    loginTypes: LoginType.CREDENTIALS,
+  })
   if (foundUser) {
     return res.status(401).send({ message: 'User already exists' })
   }
@@ -151,7 +157,10 @@ router.post('/forget-password', async (req, res) => {
    * email: string
    * }
    */
-  const user = await User.findOne({ email: req.body.email })
+  const user = await User.findOne({
+    email: req.body.email,
+    loginTypes: LoginType.CREDENTIALS,
+  })
   if (!user) return res.status(200).send({ message: 'User not found' }) // status 200 because Nextjs expects 200
   let token = await Token.findOne({ userId: user._id })
   if (token) await token.deleteOne() // Delete existing token if exists

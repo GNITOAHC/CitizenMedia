@@ -10,15 +10,14 @@ router.use((_req, _res, next) => {
 router.post('/create', async (req, res) => {
   /*
    * req.body = {
-   *  email: string,
+   *  id: string,
    *  content: string,
    *  title: string,
    *  subTitle: string,
    *  tags: string[],
    * }
    */
-  const email = req.body.email
-  const user = await User.findOne({ email: email })
+  const user = await User.findOne({ _id: req.body.id })
   if (!user) return res.status(400).send('User not found')
   const newStory = new Story({
     author: user.username,
@@ -31,6 +30,8 @@ router.post('/create', async (req, res) => {
     tags: req.body.tags,
   })
 
+  user.myStories.push(newStory._id)
+  await user.save()
   try {
     await newStory.save()
   } catch (err) {
@@ -45,11 +46,10 @@ router.post('/comment', async (req, res) => {
    * req.body = {
    * id: Types.ObjectId, // The id of the story
    * comment: string,
-   * email: string, // The email of the commenter
+   * commenter_id: string, // The id of the commenter
    * }
    */
-  const email = req.body.email
-  const user = await User.findOne({ email: email })
+  const user = await User.findOne({ _id: req.body.commenter_id })
   if (!user) return res.status(400).send('User not found')
 
   const id = req.body.id
@@ -59,7 +59,7 @@ router.post('/comment', async (req, res) => {
     comment: req.body.comment,
     date: Date.now(),
     commenter: user.username,
-    commenterId: user._id,
+    commenterId: req.body.commenter_id,
   }
   try {
     await story.updateOne({ $push: { comments: comment_body } })

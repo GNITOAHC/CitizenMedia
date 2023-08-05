@@ -22,6 +22,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     required: true,
     enum: Object.values(LoginType),
   },
+  myStories: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Story',
+  },
   date: {
     type: Date,
     required: true,
