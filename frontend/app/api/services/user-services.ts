@@ -2,7 +2,7 @@ import axios from 'axios'
 const API_URL = process.env.API_URL || 'http://localhost:8080'
 
 interface newStoryData {
-  email?: string | null
+  id?: string | null
   content: string
   title: string
   subTitle: string
@@ -12,7 +12,7 @@ interface newStoryData {
 class StoryServices {
   /*
    * req.body = {
-   *  email: string,
+   *  id: string,
    *  content: string,
    *  title: string,
    *  subTitle: string,

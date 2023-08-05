@@ -50,7 +50,7 @@ const Home = () => {
     // Post the story
     const response = await StoryServices.newStory(
       {
-        email: session?.user.email,
+        id: session?.user.id,
         ...storyData,
       },
       session?.user.jwt_token as string

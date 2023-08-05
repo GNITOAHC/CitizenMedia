@@ -5,12 +5,12 @@ import axios from 'axios'
 import type { NextAuthOptions } from 'next-auth'
 import type { User } from 'next-auth'
 
-/* 
- * type User = { 
- * name: string, 
- * email: string, 
- * image: string, 
- * id: string, 
+/*
+ * type User = {
+ * name: string,
+ * email: string,
+ * image: string,
+ * id: string,
  * jwt_token: string,
  * }
  */
@@ -39,6 +39,7 @@ export const options: NextAuthOptions = {
             name: res.data.name ?? '',
             email: res.data.email ?? '',
             jwt_token: 'Bearer ' + res.data.jwt_token ?? '',
+            id: res.data.id ?? '',
           }
           return user
         } else return null
@@ -79,5 +80,5 @@ export const options: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-  }
+  },
 }
