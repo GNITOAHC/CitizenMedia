@@ -1,6 +1,7 @@
 import Footer from './components/Footer'
 import Providers from './components/Providers'
 import Topbar from './components/Topbar'
+import ThemeProvider from './components/ThemeProvider'
 import './globals.css'
 import { Inter } from 'next/font/google'
 
@@ -19,11 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <Topbar />
-          {children}
-          <Footer />
-        </Providers>
+        <ThemeProvider>
+          <Providers>
+            <Topbar />
+            {children}
+            <Footer />
+          </Providers>
+        </ThemeProvider>
       </body>
     </html>
   )
