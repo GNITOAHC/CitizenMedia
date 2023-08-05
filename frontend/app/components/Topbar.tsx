@@ -10,9 +10,10 @@ const Topbar = () => {
 
   const [mounted, setMounted] = React.useState(false)
   React.useEffect(() => setMounted(true), [])
-  if (!mounted) return null
 
   const { theme, setTheme } = useTheme()
+
+  if (!mounted) return <div>loading...</div>
 
   if (session && session.user) {
     return (
