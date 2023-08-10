@@ -26,6 +26,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
     type: [Schema.Types.ObjectId],
     ref: 'Story',
   },
+  likedStories: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Story',
+  },
   date: {
     type: Date,
     required: true,

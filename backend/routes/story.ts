@@ -22,20 +22,47 @@ router.post('/retrieveById', async (req, res) => {
   return res.status(200).send(story)
 })
 
-router.post('/retrieve', jwt_protect, async (req, res) => {
+interface DecodedToken {
+  id: string
+}
+router.get('/retrieve', jwt_protect, async (req, res) => {
+  const token = (req.headers.authorization as string).split(' ')[1]
+  return jwt.verify(token, JWT_SECRET, async (_err, decoded) => {
+    decoded = decoded as DecodedToken
+    const id = decoded.id
+    const user = await User.findOne({ _id: id })
+    if (!user) return res.status(400).send('User not found')
+    const stories = await Story.find({ _id: { $in: user.myStories } })
+    return res.status(200).send(stories)
+  })
+})
+
+router.post('/like', jwt_protect, async (req, res) => {
   /*
    * req.body = {
-   *  id: string, // The id of the user
+   *  storyId: string, // The id of the Story
+   *  userId: string, // The id of the User
    * }
    */
-  console.log('Retrieving stories')
-  console.log(req.body)
-  const user = await User.findOne({ _id: req.body.id })
-  if (!user) return res.status(400).send('User not found')
-  console.log(user)
-  const stories = await Story.find({ _id: { $in: user.myStories } })
-  console.log(stories)
-  res.status(200).send(stories)
+  const likedBefore = await User.countDocuments({
+    _id: req.body.userId,
+    likedStories: { $in: [req.body.storyId] },
+  })
+  if (likedBefore === 1) {
+    await User.findOneAndUpdate(
+      { _id: req.body.userId },
+      { $pull: { likedStories: req.body.storyId } },
+      { returnOriginal: false }
+    )
+    res.status(200).send('Unlike success')
+  } else {
+    await User.findOneAndUpdate(
+      { _id: req.body.userId },
+      { $push: { likedStories: req.body.storyId } },
+      { returnOriginal: false }
+    )
+    res.status(200).send('Like success')
+  }
 })
 
 router.post('/create', jwt_protect, async (req, res) => {
