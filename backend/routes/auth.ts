@@ -94,7 +94,11 @@ router.post('/credentials', async (req, res) => {
 
     /* Create JWT token */
     const jwt_token = jwt.sign(
-      { name: foundUser?.username, email: foundUser?.email },
+      {
+        name: foundUser?.username,
+        email: foundUser?.email,
+        id: foundUser?._id,
+      },
       JWT_SECRET,
       { expiresIn: '180d' } // 180 days
     )

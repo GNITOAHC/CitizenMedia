@@ -1,6 +1,8 @@
 import express from 'express'
 import { User, Story } from '@/models'
 import { jwt_protect } from './auth.utils' // Require Headers Authorization
+import jwt from 'jsonwebtoken'
+import { JWT_SECRET } from '@/index'
 const router = express.Router()
 
 router.use((_req, _res, next) => {

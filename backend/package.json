@@ -35,6 +35,7 @@
   },
   "_moduleAliases": {
     "@root": "dist",
+    "@/index": "dist/index",
     "@/models": "dist/models"
   }
 }
