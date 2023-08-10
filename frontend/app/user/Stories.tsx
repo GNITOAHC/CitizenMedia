@@ -15,8 +15,8 @@ interface Story {
   tags: string[]
 }
 
-async function myStories(jwt_token: string, id: string) {
-  const response = await StoryServices.getMyStories(jwt_token, id)
+async function myStories(jwt_token: string) {
+  const response = await StoryServices.getMyStories(jwt_token)
   /* console.log(response.data) */
   if (!response) return null
   return response.data as Story[]
@@ -30,11 +30,9 @@ export default function Stories({ className }: { className: string }) {
   const [data, setData] = React.useState<Story[]>([])
 
   React.useEffect(() => {
-    myStories(session.user.jwt_token as string, session.user.id as string).then(
-      (res) => {
-        if (res) setData(res)
-      }
-    )
+    myStories(session.user.jwt_token as string).then((res) => {
+      if (res) setData(res)
+    })
   }, [])
 
   return (

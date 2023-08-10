@@ -25,14 +25,10 @@ class StoryServices {
       headers: { authorization: `${jwt_token}` },
     })
   }
-  async getMyStories(jwt_token: string, id: string) {
-    return axios.post(
-      `${API_URL}/story/retrieve`,
-      { id: id },
-      {
-        headers: { authorization: `${jwt_token}` },
-      }
-    )
+  async getMyStories(jwt_token: string) {
+    return axios.get(`${API_URL}/story/retrieve`, {
+      headers: { authorization: `${jwt_token}` },
+    })
   }
   async getStoryById(id: string) {
     return axios.post(`${API_URL}/story/retrieveById`, { id: id })
