@@ -6,6 +6,15 @@ export enum LoginType {
   GOOGLE = 'google',
 }
 
+export interface IProfileLinks {
+  facebook?: string
+  instagram?: string
+  twitter?: string
+  linkedin?: string
+  youtube?: string
+  website?: string
+}
+
 export interface IUser extends mongoose.Document {
   username: string
   email: string
@@ -13,6 +22,7 @@ export interface IUser extends mongoose.Document {
   loginTypes: LoginType
   myStories: mongoose.Types.ObjectId[]
   likedStories: mongoose.Types.ObjectId[]
+  profileLinks: IProfileLinks
   date: Date
 }
 

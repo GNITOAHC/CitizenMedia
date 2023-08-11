@@ -6,6 +6,7 @@
 <summary> /auth </summary>
 
 POST /auth/google
+
 ```ts
 /* req */
 { id_token: string }
@@ -23,6 +24,7 @@ jwt_token = {
 ```
 
 POST /auth/credentials
+
 ```ts
 /* req */
 { email: string, password: string }
@@ -37,6 +39,7 @@ jwt_token = {
 ```
 
 POST /auth/register
+
 ```ts
 /* req */
 { username: string, email: string, password: string }
@@ -45,14 +48,22 @@ POST /auth/register
 ```
 
 GET /auth/verify
+
 ```ts
 /* req */
-{ headers: { authorization: jwt_token } }
+{
+  headers: {
+    authorization: jwt_token
+  }
+}
 /* res */
-{ verified: boolean }
+{
+  verified: boolean
+}
 ```
 
 POST /auth/forget-password
+
 ```ts
 /* req */
 { email: string }
@@ -61,6 +72,7 @@ POST /auth/forget-password
 ```
 
 POST /auth/reset-password
+
 ```ts
 /* req */
 { id: string, password: string, token: string } // Token is the resetToken get from /auth/forget-password
@@ -76,22 +88,39 @@ POST /auth/reset-password
 <summary> /story </summary>
 
 POST /story/retrieveById
+
 ```ts
 /* req */
-{ id: string } // Id of the story
+{
+  id: string
+} // Id of the story
 /* res */
-{ story: { /* story object */ } }
+{
+  story: {
+    /* story object */
+  }
+}
 ```
 
 GET /story/retrieve
+
 ```ts
 /* req */
-{ headers: { authorizations: string } }
+{
+  headers: {
+    authorizations: string
+  }
+}
 /* res */
-[ { /* story object */ } ]
+;[
+  {
+    /* story object */
+  },
+]
 ```
 
-POST /user/like
+POST /story/like
+
 ```ts
 /* req */
 { storyId: string, userId: string }
@@ -100,6 +129,7 @@ string // ('Unlike success' or 'Like success')
 ```
 
 POST /story/create
+
 ```ts
 /* req */
 { id: string, content: string, title: string, subTitle: string, tags: string[] }
@@ -108,11 +138,59 @@ string
 ```
 
 POST /story/comment
+
 ```ts
 /* req */
 { id: string, comment: string, commenter_id: string } // id: Id of the story
 /* res */
 string
+```
+
+</details>
+
+## User
+
+<details>
+<summary> /user </summary>
+
+GET /user/profile-links
+
+```ts
+/* req */
+{
+  headers: {
+    authorization: string
+  }
+}
+/* res */
+{
+  profileLinks: {
+    user.prfileLInks
+  }
+}
+```
+
+```ts
+user.profileLinks: {
+    facebook: { type: String },
+    instagram: { type: String },
+    twitter: { type: String },
+    linkedin: { type: String },
+    youtube: { type: String },
+    website: { type: String },
+},
+```
+
+POST /user/profile-links
+
+```ts
+/* req */
+{ facebook: string, twitter: string, instagram: string ... }
+// available options: facebook, instagram, twitter, linkedin, youtube, website
+// leave blank to delete, e.x.
+{ facebook: 'https://facebook.com', instagram: '' }
+/* res */
+{ profileLinks: { user.profileLinks } }
 ```
 
 </details>

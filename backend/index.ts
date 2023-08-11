@@ -33,6 +33,9 @@ app.use('/auth', authRoute)
 import { storyRoute } from './routes'
 app.use('/story', storyRoute)
 
+import { userRoute } from './routes'
+app.use('/user', userRoute)
+
 app.listen(8080, () => {
   console.log('Listening on port 8080')
 })
