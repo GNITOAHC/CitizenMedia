@@ -55,9 +55,14 @@ const Home = () => {
       },
       session?.user.jwt_token as string
     )
-    console.log(response)
+    console.log(response.data)
+    if (response.data.message === 'Story created') {
+      window.alert('Story created')
+      window.location.href = `/stories/${response.data.newStoryId}`
+    }
   }
   const handleSave = async () => {
+    /* TODO: handle save */
     console.log('save')
   }
 

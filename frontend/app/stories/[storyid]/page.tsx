@@ -26,7 +26,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
 
   React.useEffect(() => {
     StoryServices.getStoryById(params.storyid).then((res) => {
-      if (res) setData(res.data)
+      if (res && res.data != 'Story not found') setData(res.data)
     })
   }, [])
 
@@ -46,11 +46,15 @@ export default function Home({ params }: { params: { storyid: string } }) {
     <div className="h-screen">
       <div>My Post: {params.storyid}</div>
       <button onClick={() => console.log(params)}>Click</button>
-      <div className="m-12 border-black border-r-2 border-4">
-        <p>Title: {data && data.title}</p>
-        <p>Sub Title: {data && data.subTitle}</p>
-        {content && parse(content)}
-      </div>
+      {data ? (
+        <div className="m-12 border-black border-r-2 border-4">
+          <p>Title: {data && data.title}</p>
+          <p>Sub Title: {data && data.subTitle}</p>
+          {content && parse(content)}
+        </div>
+      ) : (
+        <p>Story not found</p>
+      )}
     </div>
   )
 }

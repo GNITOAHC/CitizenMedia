@@ -16,10 +16,14 @@ router.post('/retrieveById', async (req, res) => {
    *  id: string, // The id of the Story
    * }
    */
-  const story = await Story.findOne({ _id: req.body.id })
-  console.log(story)
-  if (!story) return res.status(400).send('Story not found')
-  return res.status(200).send(story)
+  try {
+    const story = await Story.findOne({ _id: req.body.id })
+    if (!story) return res.status(400).send('Story not found')
+    return res.status(200).send(story)
+  } catch (err) {
+    console.log(err)
+    return res.status(200).send('Story not found')
+  }
 })
 
 interface DecodedToken {
@@ -96,7 +100,9 @@ router.post('/create', jwt_protect, async (req, res) => {
     return res.status(500).send(err)
   }
 
-  return res.status(200).send('Story created')
+  return res
+    .status(200)
+    .send({ message: 'Story created', newStoryId: newStory._id })
 })
 
 router.post('/comment', jwt_protect, async (req, res) => {
