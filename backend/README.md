@@ -11,14 +11,15 @@ POST /auth/google
 /* req */
 { id_token: string }
 /* res */
-user: {
-    { name: string, email: string, image: string, jwt_token: string, id: string }
+{
+  user: {
+    { name: string, email: string, avatar: string, jwt_token: string, id: string }
+  }
 }
 /* jwt_token */
 jwt_token = {
     name: string,
     email: string,
-    image: string,
     id: string
 }
 ```
@@ -29,7 +30,7 @@ POST /auth/credentials
 /* req */
 { email: string, password: string }
 /* res */
-{ name: string, email: string, jwt_token: string, id: string }
+{ name: string, email: string, avatar: string, jwt_token: string, id: string }
 /* jwt_token */
 jwt_token = {
     name: string,
@@ -134,7 +135,7 @@ POST /story/create
 /* req */
 { id: string, content: string, title: string, subTitle: string, tags: string[] }
 /* res */
-string
+{ message: string, newStoryId: string }
 ```
 
 POST /story/comment
