@@ -17,6 +17,10 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   password: {
     type: String,
   },
+  avatar: {
+    type: String,
+    required: true,
+  },
   loginTypes: {
     type: String,
     required: true,

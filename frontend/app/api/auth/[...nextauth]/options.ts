@@ -9,7 +9,7 @@ import type { User } from 'next-auth'
  * type User = {
  * name: string,
  * email: string,
- * image: string,
+ * avatar: string,
  * id: string,
  * jwt_token: string,
  * }
@@ -40,6 +40,7 @@ export const options: NextAuthOptions = {
             email: res.data.email ?? '',
             jwt_token: 'Bearer ' + res.data.jwt_token ?? '',
             id: res.data.id ?? '',
+            avatar: res.data.avatar ?? '',
           }
           return user
         } else return null

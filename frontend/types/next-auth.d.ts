@@ -8,12 +8,13 @@ declare module 'next-auth' {
     user: {
       id?: string
       jwt_token?: string
+      avatar?: string
     } & DefaultSession['user']
   }
   interface User {
     name?: string
     email?: string
-    image?: string
+    avatar?: string
     id?: string
     jwt_token?: string
   }
@@ -21,6 +22,7 @@ declare module 'next-auth' {
     user: {
       id?: string
       jwt_token?: string
+      avatar?: string
     }
   }
 }

@@ -5,6 +5,7 @@ import 'dotenv/config'
 import crypto from 'crypto'
 import { User, LoginType, Token } from '@/models'
 import { sendMail, resetPassword } from './auth.utils'
+import { JWT_SECRET } from '@/index'
 
 const router = express.Router()
 
@@ -15,12 +16,6 @@ const router = express.Router()
  * loginTypes: LoginType
  * }
  */
-
-// Check for environment variables
-const JWT_SECRET = process.env.JWT_SECRET as string
-if (!JWT_SECRET || JWT_SECRET == '') {
-  throw new Error('JWT_SECRET not defined')
-}
 
 router.post('/google', async (req, res) => {
   const id_token = req.body.id_token
@@ -40,6 +35,7 @@ router.post('/google', async (req, res) => {
           username: data['name'],
           email: data['email'],
           loginTypes: LoginType.GOOGLE,
+          avatar: data['picture'],
         })
         newUser.save()
       } catch (err) {
@@ -51,7 +47,6 @@ router.post('/google', async (req, res) => {
       {
         name: data['name'],
         email: data['email'],
-        image: data['picture'],
         id: foundUser?._id,
       },
       JWT_SECRET,
@@ -61,7 +56,7 @@ router.post('/google', async (req, res) => {
       user: {
         name: data['name'],
         email: data['email'],
-        image: data['picture'],
+        avatar: data['picture'],
         jwt_token: jwt_token,
         id: foundUser?._id,
       },
@@ -105,6 +100,7 @@ router.post('/credentials', async (req, res) => {
     return res.status(200).send({
       name: foundUser?.username,
       email: foundUser?.email,
+      avatar: foundUser?.avatar,
       jwt_token: jwt_token,
       id: foundUser?._id,
     })
@@ -132,6 +128,9 @@ router.post('/register', async (req, res) => {
    */
   try {
     const newUser = new User({ ...req.body, loginTypes: LoginType.CREDENTIALS })
+    /* Default a unknown avatar */
+    newUser.avatar =
+      'https://t3.ftcdn.net/jpg/03/53/11/00/360_F_353110097_nbpmfn9iHlxef4EDIhXB1tdTD0lcWhG9.jpg'
     newUser.save()
     return res.status(200).send({ message: 'User created' })
   } catch (err) {

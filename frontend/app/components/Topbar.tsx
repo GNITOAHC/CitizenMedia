@@ -43,6 +43,12 @@ const Topbar = () => {
           system
         </button>
         <p className="ml-8">current theme: {theme}</p>
+        <img
+          src={session?.user?.avatar as string}
+          alt="here was a logo:("
+          width={30}
+          height={30}
+        />
       </header>
     )
   }
