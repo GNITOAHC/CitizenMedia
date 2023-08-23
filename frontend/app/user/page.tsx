@@ -27,13 +27,15 @@ export default function Home() {
     <main className="flex min-h-screen justify-between p-24 space-x-24">
       <div className="w-8/12">
         <section className="flex flex-row items-center">
-          <Image
-            src={session?.user.avatar as string}
-            alt="image"
-            width="130"
-            height="130"
-            className="rounded-full m-3.5"
-          />
+          {session && (
+            <Image
+              src={session?.user.avatar as string}
+              alt="image"
+              width="130"
+              height="130"
+              className="rounded-full m-3.5"
+            />
+          )}
           <p className="text-4xl font-bold flex m-3.5">{session?.user?.name}</p>
         </section>
         <section className="flex flex-row justify-end">
