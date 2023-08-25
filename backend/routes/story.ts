@@ -133,4 +133,11 @@ router.post('/comment', jwt_protect, async (req, res) => {
   return res.status(200).send('Comment added')
 })
 
+router.get('/retrieveEight', async (_req, res) => {
+  const stories = await Story.find().sort({ createdAt: -1 }).limit(8)
+  if (!stories) return res.status(200).send({ message: 'Stories not found' })
+  console.log(stories)
+  return res.status(200).send(stories)
+})
+
 export default router
