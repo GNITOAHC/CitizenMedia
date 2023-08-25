@@ -58,28 +58,26 @@ func main() {
 func connectToDB() *mongo.Client {
 	log.Println("Connecting to MongoDB...")
 
-    clientOptions := options.Client().ApplyURI("mongodb://root:rootpassword@mongo:27017/")
-	// clientOptions.SetAuth(options.Credential{
-	// 	Username: "admin",
-	// 	Password: "password",
-	// })
-
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, clientOptions)
-	// client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017/"))
-	// defer client.Disconnect(ctx)
+
+	// Use this for when running in Docker
+	// clientOptions := options.Client().ApplyURI("mongodb://root:rootpassword@mongo:27017/")
+	// client, err := mongo.Connect(ctx, clientOptions)
+
+	// Use this for when running locally
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017/"))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-    // Check the connection
-    err = client.Ping(ctx, nil)
-    if err != nil {
-        log.Fatal(err)
-    }
-    log.Println("Connected to MongoDB!")
+	// Check the connection
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Connected to MongoDB!")
 
 	// collection := client.Database("GolangImageTest").Collection("images")
 

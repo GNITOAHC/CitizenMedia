@@ -13,6 +13,7 @@ func (a *App) routes() http.Handler {
 	mux.HandleFunc("/", a.home)
 	mux.HandleFunc("/upload", a.uploadImage)
 	mux.HandleFunc("/display", a.displayImage)
+    mux.HandleFunc("/delete", a.deleteImage)
 
 	return mux
 }

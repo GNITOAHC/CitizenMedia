@@ -2,18 +2,37 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+type Response struct {
+	Message string `json:"message"`
+	Id      string `json:"id"`
+}
+
 // uploadImage is the handler for the upload route
 func (a *App) uploadImage(w http.ResponseWriter, r *http.Request) {
+	// Check if the request is a POST request
+	if r.Method != http.MethodPost {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Check if the request is a multipart formdata
+	if r.Header.Get("Content-Type") != "multipart/form-data" {
+		http.Error(w, "Unsupported media type", http.StatusUnsupportedMediaType)
+		return
+	}
+
 	// Parse our multipart form, 10 << 20 specifies a maximum upload of 10 MB files.
 	r.ParseMultipartForm(10 << 20)
 
@@ -48,21 +67,34 @@ func (a *App) uploadImage(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error inserting image data into MongoDB", http.StatusInternalServerError)
 		return
 	}
-	fmt.Println(storedImage)
+	primitiveId := storedImage.InsertedID.(primitive.ObjectID)
 
 	// Respond with success message
-	w.Write([]byte("Image uploaded successfully"))
+	// w.Write([]byte("Image uploaded successfully"))
+	res := Response{
+		Message: "Image uploaded successfully",
+		Id:      primitiveId.Hex(),
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
 
 	return
 }
 
+// displayImage is the handler for the display route
 func (a *App) displayImage(w http.ResponseWriter, r *http.Request) {
+	// Check if the request is a GET request
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
 	// Parse the query string parameter _id
 	queryValues := r.URL.Query()
-	id := queryValues.Get("_id")
+	targetId := queryValues.Get("_id")
 
 	// Convert the _id to an ObjectID
-	docId, err := primitive.ObjectIDFromHex(id)
+	docId, err := primitive.ObjectIDFromHex(targetId)
 	if err != nil {
 		log.Print(err)
 		http.Error(w, "Error converting _id to ObjectID", http.StatusInternalServerError)
@@ -89,4 +121,46 @@ func (a *App) displayImage(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		http.Error(w, "Error writing image data to response", http.StatusInternalServerError)
 	}
+}
+
+// deleteImage is the handler for the delete route
+func (a *App) deleteImage(w http.ResponseWriter, r *http.Request) {
+	// Check if the request is a DELETE request
+	if r.Method != http.MethodDelete {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Read request to get the target id
+	reqBody, err := io.ReadAll(r.Body)
+	if err != nil {
+		log.Print(err)
+		http.Error(w, "Error reading request body", http.StatusInternalServerError)
+		return
+	}
+	targetId := strings.Trim(string(reqBody), "id=")
+
+	// Convert the _id to an ObjectID
+	docId, err := primitive.ObjectIDFromHex(targetId)
+	if err != nil {
+		log.Print(err)
+		http.Error(w, "Error converting _id to ObjectID", http.StatusInternalServerError)
+		return
+	}
+
+	result, err := a.collection.DeleteOne(context.Background(), bson.M{"_id": docId})
+	if err != nil {
+		log.Print(err)
+		http.Error(w, "Error deleting image from MongoDB", http.StatusInternalServerError)
+		return
+	}
+	log.Println("Deleted", result.DeletedCount, "documents")
+
+	// Respond with success Message
+	res := Response{
+		Message: "Image deleted successfully",
+		Id:      targetId,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(res)
 }
