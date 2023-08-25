@@ -33,6 +33,10 @@ class StoryServices {
   async getStoryById(id: string) {
     return axios.post(`${API_URL}/story/retrieveById`, { id: id })
   }
+
+  async getCarouselStories() {
+    return axios.get(`${API_URL}/story/retrieveEight`)
+  }
 }
 
 export default new StoryServices()
