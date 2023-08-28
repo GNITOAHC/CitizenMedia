@@ -16,7 +16,7 @@ const portNumber = ":80"
 
 // App is the struct that holds the MongoDB collection
 type App struct {
-	collection *mongo.Collection
+	database *mongo.Database
 }
 
 // MongoFields is the struct that defines the fields in the MongoDB database
@@ -38,7 +38,7 @@ func main() {
 
 	// Declare the app
 	app := App{
-		collection: client.Database("GolangImageTest").Collection("images"),
+		database: client.Database("GolangImageTest"),
 	}
 
 	// Declare the server
