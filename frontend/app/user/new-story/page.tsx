@@ -8,24 +8,25 @@ import BulletList from '@tiptap/extension-bullet-list'
 import Menubar from './Menubar'
 import { useSession } from 'next-auth/react'
 import { StoryServices } from '@/api/services'
+import Tags from '@yaireo/tagify/dist/react.tagify'
+import '@yaireo/tagify/dist/tagify.css'
 
 interface storyData {
   title: string
   subTitle: string
   content: string
-  tags: string[]
 }
 
 const Home = () => {
   const { data: session } = useSession()
 
-  let [storyData, setStoryData] = useState<storyData>({
+  const [storyData, setStoryData] = useState<storyData>({
     title: '',
     subTitle: '',
     content:
       '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Hello World! 🌎️"}]}]}',
-    tags: [],
   })
+  const [tags, setTags] = useState<{ tags: string[] }>({ tags: [] })
 
   /*
    * req.body = {
@@ -52,6 +53,7 @@ const Home = () => {
       {
         id: session?.user.id,
         ...storyData,
+        ...tags,
       },
       session?.user.jwt_token as string
     )
@@ -78,6 +80,19 @@ const Home = () => {
       setStoryData({ ...storyData, content: JSON.stringify(editor.getJSON()) })
     },
   })
+
+  const tagOnChange = React.useCallback((e: any) => {
+    const allTags: [] = e.detail.tagify
+      .getCleanValue()
+      .map((tagifyTags: any) => tagifyTags.value)
+    setTags({ tags: allTags })
+    /* console.log( */
+    /*   'CHANGED:', */
+    /*   e.detail.tagify.value, // Array where each tag includes tagify's (needed) extra properties */
+    /*   e.detail.tagify.getCleanValue(), // Same as above, without the extra properties */
+    /*   e.detail.value // a string representing the tags */
+    /* ) */
+  }, [])
 
   return (
     <div className="flex flex-col gap-2 m-10">
@@ -108,7 +123,12 @@ const Home = () => {
         className="sticky bottom-20 mt-6 flex justify-center"
       />
       <div className="h-10" />
-      <input type="text" placeholder="Tags" className="w-64 text-black" />
+      <Tags
+        onChange={tagOnChange}
+        placeholder="tags"
+        whitelist={[]}
+        settings={{ autoComplete: { enabled: true } }}
+      />
       <section className="flex gap-2 m-5 justify-end">
         <button onClick={() => handleSave()}>Save</button>
         <button onClick={() => handlePost()}>Post</button>

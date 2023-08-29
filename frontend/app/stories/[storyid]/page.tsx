@@ -6,6 +6,10 @@ import { generateHTML } from '@tiptap/html'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
+import StarterKit from '@tiptap/starter-kit'
+import ListItem from '@tiptap/extension-list-item'
+import OrderedList from '@tiptap/extension-ordered-list'
+import BulletList from '@tiptap/extension-bullet-list'
 import parse from 'html-react-parser'
 
 interface Story {
@@ -37,7 +41,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
           data?.content ??
             '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Loading..."}]}]}'
         ),
-        [Document, Paragraph, Text]
+        [Document, Paragraph, Text, StarterKit, ListItem, OrderedList, BulletList]
       )
     )
   }, [data?.content])
@@ -50,7 +54,10 @@ export default function Home({ params }: { params: { storyid: string } }) {
         <div className="m-12 border-black border-r-2 border-4">
           <p>Title: {data && data.title}</p>
           <p>Sub Title: {data && data.subTitle}</p>
+          <br />
           {content && parse(content)}
+          <br />
+          <p>Tags: {data && data.tags.join(', ')}</p>
         </div>
       ) : (
         <p>Story not found</p>
