@@ -191,4 +191,37 @@ router.post('/reset-password', async (req, res) => {
   res.status(200).send({ message: result.message })
 })
 
+router.patch('/update-password', async (req, res) => {
+  /*
+   * req.body = {
+   * id: string, // User id
+   * oldPassword: string,
+   * newPassword: string
+   */
+  try {
+    const user = await User.findOne({ _id: req.body.id })
+    if (!user) return res.status(401).send({ message: 'User not found' })
+    if (user.loginTypes != LoginType.CREDENTIALS) {
+      return res
+        .status(200)
+        .send({ message: 'User not registered with credentials' })
+    }
+    user.comparePassword(
+      req.body.oldPassword,
+      async (err: any, isMatch: boolean) => {
+        if (err)
+          return res.status(500).send({ message: 'Error comparing password' })
+        if (!isMatch)
+          return res.status(401).send({ message: 'Password does not match' })
+        user.password = req.body.newPassword
+        await user.save()
+        return res.status(200).send({ message: 'Password updated' })
+      }
+    )
+  } catch (err) {
+    console.log(err)
+    res.send({ message: 'Error updating password' })
+  }
+})
+
 export default router
