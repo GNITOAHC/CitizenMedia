@@ -12,6 +12,9 @@ import OrderedList from '@tiptap/extension-ordered-list'
 import BulletList from '@tiptap/extension-bullet-list'
 import parse from 'html-react-parser'
 
+// Use CSS Modules to style story body component
+import storyStyles from './story.module.css'
+
 interface Story {
   _id: string
   author: string
@@ -41,7 +44,15 @@ export default function Home({ params }: { params: { storyid: string } }) {
           data?.content ??
             '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Loading..."}]}]}'
         ),
-        [Document, Paragraph, Text, StarterKit, ListItem, OrderedList, BulletList]
+        [
+          Document,
+          Paragraph,
+          Text,
+          StarterKit,
+          ListItem,
+          OrderedList,
+          BulletList,
+        ]
       )
     )
   }, [data?.content])
@@ -55,7 +66,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
           <p>Title: {data && data.title}</p>
           <p>Sub Title: {data && data.subTitle}</p>
           <br />
-          {content && parse(content)}
+          <div className={storyStyles.content}>{content && parse(content)}</div>
           <br />
           <p>Tags: {data && data.tags.join(', ')}</p>
         </div>
