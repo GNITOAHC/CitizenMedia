@@ -10,24 +10,24 @@ app.use(express.json())
 app.use(cors())
 
 /* Use this when running on docker */
-mongoose
-  .connect('mongodb://mongo:27017/CitizenMediaDB', {
-    authSource: 'admin',
-    user: 'root',
-    pass: 'rootpassword',
-  })
-  .then(() => console.log('Connecting to MongoDB'))
-  .catch((e) => {
-    console.log(e)
-  })
-
-/* Use this when running on localhost */
 /* mongoose */
-/*   .connect('mongodb://127.0.0.1:27017/CitizenMediaDB') */
+/*   .connect('mongodb://mongo:27017/CitizenMediaDB', { */
+/*     authSource: 'admin', */
+/*     user: 'root', */
+/*     pass: 'rootpassword', */
+/*   }) */
 /*   .then(() => console.log('Connecting to MongoDB')) */
 /*   .catch((e) => { */
 /*     console.log(e) */
 /*   }) */
+
+/* Use this when running on localhost */
+mongoose
+  .connect('mongodb://127.0.0.1:27017/CitizenMediaDB')
+  .then(() => console.log('Connecting to MongoDB'))
+  .catch((e) => {
+    console.log(e)
+  })
 
 /* Get the JWT_SECRET from the .env file and export it */
 import 'dotenv/config'
