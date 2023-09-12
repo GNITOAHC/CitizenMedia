@@ -4,6 +4,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Logo from '../../public/logo-white.svg'
 import { useTheme } from 'next-themes'
+import Sidebar from '@/components/Sidebar'
 
 const Topbar = () => {
   const { data: session } = useSession()
@@ -49,6 +50,7 @@ const Topbar = () => {
           width={30}
           height={30}
         />
+        <Sidebar />
       </header>
     )
   }

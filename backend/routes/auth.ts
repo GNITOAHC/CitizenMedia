@@ -7,6 +7,14 @@ import { User, LoginType, Token } from '@/models'
 import { sendMail, resetPassword } from './auth.utils'
 import { JWT_SECRET } from '@/index'
 
+interface IUser {
+  name: string
+  email: string
+  avatar: string
+  jwt_token: string
+  id: string
+}
+
 const router = express.Router()
 
 /* foundUser = {
@@ -52,15 +60,14 @@ router.post('/google', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '180d' } // 180 days
     )
-    return res.status(200).send({
-      user: {
-        name: data['name'],
-        email: data['email'],
-        avatar: data['picture'],
-        jwt_token: jwt_token,
-        id: foundUser?._id,
-      },
-    })
+    const user: IUser = {
+      name: data['name'],
+      email: data['email'],
+      avatar: data['picture'],
+      jwt_token: jwt_token,
+      id: foundUser?._id,
+    }
+    return res.status(200).send(user)
   } else {
     return res.status(401).send({ message: 'Email not verified' })
   }
@@ -97,13 +104,16 @@ router.post('/credentials', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '180d' } // 180 days
     )
-    return res.status(200).send({
-      name: foundUser?.username,
-      email: foundUser?.email,
-      avatar: foundUser?.avatar,
+
+    const user: IUser = {
+      name: foundUser?.username as string,
+      email: foundUser?.email as string,
+      avatar: foundUser?.avatar as string,
       jwt_token: jwt_token,
-      id: foundUser?._id,
-    })
+      id: foundUser?._id as string,
+    }
+
+    return res.status(200).send(user)
   })
 })
 
@@ -189,6 +199,39 @@ router.post('/reset-password', async (req, res) => {
   )
   if (result.error) return res.status(500).send({ message: result.error })
   res.status(200).send({ message: result.message })
+})
+
+router.patch('/update-password', async (req, res) => {
+  /*
+   * req.body = {
+   * id: string, // User id
+   * oldPassword: string,
+   * newPassword: string
+   */
+  try {
+    const user = await User.findOne({ _id: req.body.id })
+    if (!user) return res.status(401).send({ message: 'User not found' })
+    if (user.loginTypes != LoginType.CREDENTIALS) {
+      return res
+        .status(200)
+        .send({ message: 'User not registered with credentials' })
+    }
+    user.comparePassword(
+      req.body.oldPassword,
+      async (err: any, isMatch: boolean) => {
+        if (err)
+          return res.status(500).send({ message: 'Error comparing password' })
+        if (!isMatch)
+          return res.status(401).send({ message: 'Password does not match' })
+        user.password = req.body.newPassword
+        await user.save()
+        return res.status(200).send({ message: 'Password updated' })
+      }
+    )
+  } catch (err) {
+    console.log(err)
+    res.send({ message: 'Error updating password' })
+  }
 })
 
 export default router

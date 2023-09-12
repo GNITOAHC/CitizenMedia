@@ -1,0 +1,11 @@
+.content ol, .content ul {
+  padding-left: 1em;
+}
+
+.content ol {
+  list-style-type: decimal;
+}
+
+.content ul {
+  list-style-type: disc;
+}

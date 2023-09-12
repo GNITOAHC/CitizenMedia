@@ -10,9 +10,8 @@ async function credentials(data: { email: string; password: string }) {
     redirect: false,
   })
   if (result?.error) {
-    if (result?.error === 'Request failed with status code 401') {
-      return window.alert('Please check your email and password')
-    }
+    console.log(result.error)
+    return window.alert('Please check your email and password')
   }
 }
 
@@ -48,7 +47,7 @@ export default function Home() {
         <button onClick={() => credentials(cred)}>
           Sign in with Credentials
         </button>
-        <Link href='/auth/signin/forget-password'>Forget password</Link>
+        <Link href="/auth/signin/forget-password">Forget password</Link>
         <p>Create account</p>
       </div>
     </div>

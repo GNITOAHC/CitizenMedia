@@ -22,16 +22,20 @@ class StoryServices {
   async newStory(data: newStoryData, jwt_token: string) {
     console.log(data)
     return axios.post(`${API_URL}/story/create`, data, {
-      headers: { authorization: `${jwt_token}` },
+      headers: { authorization: `Bearer ${jwt_token}` },
     })
   }
   async getMyStories(jwt_token: string) {
     return axios.get(`${API_URL}/story/retrieve`, {
-      headers: { authorization: `${jwt_token}` },
+      headers: { authorization: `Bearer ${jwt_token}` },
     })
   }
-  async getStoryById(id: string) {
-    return axios.post(`${API_URL}/story/retrieveById`, { id: id })
+  async getStoryById(_id: string) {
+    return axios.post(`${API_URL}/story/retrieve-by-id`, { _id: _id })
+  }
+
+  async getCarouselStories() {
+    return axios.get(`${API_URL}/story/retrieve-eight`)
   }
 }
 

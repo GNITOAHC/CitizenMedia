@@ -10,14 +10,14 @@ router.use((_req, _res, next) => {
   next()
 })
 
-router.post('/retrieveById', async (req, res) => {
+router.post('/retrieve-by-id', async (req, res) => {
   /*
    * req.body = {
-   *  id: string, // The id of the Story
+   *  _id: string, // The id of the Story
    * }
    */
   try {
-    const story = await Story.findOne({ _id: req.body.id })
+    const story = await Story.findOne({ _id: req.body._id })
     if (!story) return res.status(400).send('Story not found')
     return res.status(200).send(story)
   } catch (err) {
@@ -131,6 +131,13 @@ router.post('/comment', jwt_protect, async (req, res) => {
     console.log(err)
   }
   return res.status(200).send('Comment added')
+})
+
+router.get('/retrieve-eight', async (_req, res) => {
+  const stories = await Story.find().sort({ createdAt: -1 }).limit(8)
+  if (!stories) return res.status(200).send({ message: 'Stories not found' })
+  console.log(stories)
+  return res.status(200).send(stories)
 })
 
 export default router

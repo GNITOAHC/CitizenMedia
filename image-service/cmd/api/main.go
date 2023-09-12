@@ -16,7 +16,7 @@ const portNumber = ":80"
 
 // App is the struct that holds the MongoDB collection
 type App struct {
-	collection *mongo.Collection
+	database *mongo.Database
 }
 
 // MongoFields is the struct that defines the fields in the MongoDB database
@@ -38,7 +38,7 @@ func main() {
 
 	// Declare the app
 	app := App{
-		collection: client.Database("GolangImageTest").Collection("images"),
+		database: client.Database("GolangImageTest"),
 	}
 
 	// Declare the server
@@ -62,11 +62,11 @@ func connectToDB() *mongo.Client {
 	defer cancel()
 
 	// Use this for when running in Docker
-	clientOptions := options.Client().ApplyURI("mongodb://root:rootpassword@mongo:27017/")
-	client, err := mongo.Connect(ctx, clientOptions)
+	// clientOptions := options.Client().ApplyURI("mongodb://root:rootpassword@mongo:27017/")
+	// client, err := mongo.Connect(ctx, clientOptions)
 
 	// Use this for when running locally
-	// client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017/"))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017/"))
 
 	if err != nil {
 		log.Fatal(err)

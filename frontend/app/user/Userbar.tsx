@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { UserServices } from '@/api/services'
 
@@ -23,13 +24,17 @@ export default function Userbar() {
   return (
     <div>
       <section className="border-2">
-        <div className="flex flex-row justify-between">
-          <div className="avatar">
-            <div className="w-24 rounded-full">
-              <img src={session?.user.avatar} alt="avatar" />
-            </div>
-            <p>User {username}</p>
-          </div>
+        <div className="flex justify-start items-center">
+          {session && (
+            <Image
+              src={session?.user.avatar as string}
+              alt="avatar"
+              width="130"
+              height="130"
+              className="rounded-full m-3.5"
+            />
+          )}
+          <p>User {username}</p>
         </div>
         <div className="flex">Links to profile, settings, etc.</div>
         {profile &&
