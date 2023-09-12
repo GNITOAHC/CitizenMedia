@@ -7,6 +7,14 @@ import { User, LoginType, Token } from '@/models'
 import { sendMail, resetPassword } from './auth.utils'
 import { JWT_SECRET } from '@/index'
 
+interface IUser {
+  name: string
+  email: string
+  avatar: string
+  jwt_token: string
+  id: string
+}
+
 const router = express.Router()
 
 /* foundUser = {
@@ -52,15 +60,14 @@ router.post('/google', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '180d' } // 180 days
     )
-    return res.status(200).send({
-      user: {
-        name: data['name'],
-        email: data['email'],
-        avatar: data['picture'],
-        jwt_token: jwt_token,
-        id: foundUser?._id,
-      },
-    })
+    const user: IUser = {
+      name: data['name'],
+      email: data['email'],
+      avatar: data['picture'],
+      jwt_token: jwt_token,
+      id: foundUser?._id,
+    }
+    return res.status(200).send(user)
   } else {
     return res.status(401).send({ message: 'Email not verified' })
   }
@@ -97,13 +104,16 @@ router.post('/credentials', async (req, res) => {
       JWT_SECRET,
       { expiresIn: '180d' } // 180 days
     )
-    return res.status(200).send({
-      name: foundUser?.username,
-      email: foundUser?.email,
-      avatar: foundUser?.avatar,
+
+    const user: IUser = {
+      name: foundUser?.username as string,
+      email: foundUser?.email as string,
+      avatar: foundUser?.avatar as string,
       jwt_token: jwt_token,
-      id: foundUser?._id,
-    })
+      id: foundUser?._id as string,
+    }
+
+    return res.status(200).send(user)
   })
 })
 

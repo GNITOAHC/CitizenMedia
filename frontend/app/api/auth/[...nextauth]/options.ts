@@ -30,25 +30,12 @@ export const options: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        const res = await axios.post(API_URL + '/auth/credentials', {
-          email: credentials?.email,
-          password: credentials?.password,
-        })
-        if (res && res.status == 200) {
-          let user = {
-            name: res.data.name ?? '',
-            email: res.data.email ?? '',
-            jwt_token: 'Bearer ' + res.data.jwt_token ?? '',
-            id: res.data.id ?? '',
-            avatar: res.data.avatar ?? '',
-          }
-          return user
-        } else return null
+        return { email: credentials?.email, password: credentials?.password }
       },
     }),
   ],
   callbacks: {
-    async signIn({ account, user, profile }) {
+    async signIn({ account, credentials }) {
       if (account && account.provider === 'google') {
         const res = await axios
           .post(API_URL + '/auth/google', { id_token: account.id_token })
@@ -56,16 +43,20 @@ export const options: NextAuthOptions = {
             console.log(err)
           })
         if (res && res.status == 200) {
-          account.user = res.data.user as User
-          account.user.jwt_token = 'Bearer ' + res.data.user.jwt_token
+          account.user = res.data as User
           return true
         } else return false
       } else if (account && account.provider === 'credentials') {
-        const res = await axios.get(API_URL + '/auth/verify', {
-          headers: { Authorization: user.jwt_token },
-        })
-        if (res && res.data.verified == true) {
-          account.user = { ...user } as User
+        const res = await axios
+          .post(API_URL + '/auth/credentials', {
+            email: credentials?.email,
+            password: credentials?.password,
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+        if (res && res.status == 200) {
+          account.user = res.data as User
           return true
         } else return false
       }
