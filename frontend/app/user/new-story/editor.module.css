@@ -1,0 +1,25 @@
+.editor [contenteditable="true"]:focus {
+    outline: none;
+}
+
+.editor ol, .editor ul {
+  padding-left: 1em;
+}
+
+.editor blockquote {
+  padding: 1rem;
+  padding-left: 2rem;
+  background: #fff;
+  border-radius: 0.25rem;
+  border: 0.24rem solid #000;
+  border-left-width: 1rem;
+}
+
+.editor pre {
+  padding: 1rem;
+  background: #000;
+  border-radius: 0.25rem;
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1.3;
+}

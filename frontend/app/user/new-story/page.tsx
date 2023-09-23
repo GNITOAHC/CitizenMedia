@@ -10,6 +10,10 @@ import { useSession } from 'next-auth/react'
 import { StoryServices } from '@/api/services'
 import Tags from '@yaireo/tagify/dist/react.tagify'
 import '@yaireo/tagify/dist/tagify.css'
+import Image from '@tiptap/extension-image'
+
+import editorStyles from './editor.module.css'
+import { imageDropHandler } from './imageDropHandler'
 
 interface storyData {
   title: string
@@ -74,7 +78,11 @@ const Home = () => {
       ListItem,
       OrderedList.configure({ HTMLAttributes: { class: 'list-decimal' } }),
       BulletList.configure({ HTMLAttributes: { class: 'list-disc' } }),
+      Image,
     ],
+    editorProps: {
+      /* handleDrop: imageDropHandler, */
+    },
     content: '<p>Hello World! 🌎️</p>',
     onUpdate: ({ editor }) => {
       setStoryData({ ...storyData, content: JSON.stringify(editor.getJSON()) })
@@ -116,7 +124,9 @@ const Home = () => {
       </section>
       <EditorContent
         editor={editor}
-        className="min-h-[70vh] p-5 border rounded-md border-black dark:border-white"
+        /* className="list-inside" */
+        /* className="min-h-[70vh] p-5 border rounded-md border-black dark:border-white" */
+        className={editorStyles.editor}
       />
       <Menubar
         editor={editor}
@@ -133,6 +143,7 @@ const Home = () => {
         <button onClick={() => handleSave()}>Save</button>
         <button onClick={() => handlePost()}>Post</button>
       </section>
+      <img src="http://localhost:80/display?_id=650eda84c4bf25c4e827b1fd&collection=avatar" />
     </div>
   )
 }

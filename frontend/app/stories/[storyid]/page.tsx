@@ -10,6 +10,7 @@ import StarterKit from '@tiptap/starter-kit'
 import ListItem from '@tiptap/extension-list-item'
 import OrderedList from '@tiptap/extension-ordered-list'
 import BulletList from '@tiptap/extension-bullet-list'
+import Image from '@tiptap/extension-image'
 import parse from 'html-react-parser'
 
 // Use CSS Modules to style story body component
@@ -52,6 +53,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
           ListItem,
           OrderedList,
           BulletList,
+          Image,
         ]
       )
     )
