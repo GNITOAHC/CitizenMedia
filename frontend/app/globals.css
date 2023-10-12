@@ -2,34 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root,
-.light {
-  --background-color: #FFFFFF;
-  --color-text-primary: #333333;
-  
-  --color-btn-primary: #0F3E7A;
-  --color-divider: #0F3E7A;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
 .dark {
-  --background-color: #4E4E4E;
-  --color-text-primary: #FFFFFF;
-
-  --color-btn-primary: #FFD37E;
-  --color-divider: #FFFFFF;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 78, 78, 78;
+  --background-end-rgb: 78, 78, 78;
 }
-
-/* daisyui color configuration start */
-
-.btn-primary {
-  color: var(--color-btn-primary);
-}
-
-.menu {
-  background: #426CA3
-}
-
-/* daisyui color configuration stop */
 
 /* @media (prefers-color-scheme: dark) { */
 /*   :root { */
@@ -40,6 +23,11 @@
 /* } */
 
 body {
-  color: var(--color-text-primary);
-  background: var(--background-color)
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
