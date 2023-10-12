@@ -85,7 +85,7 @@ const Home = () => {
       Image,
     ],
     editorProps: {
-      /* handleDrop: imageDropHandler, */
+      handleDrop: imageDropHandler,
     },
     content: '<p>Hello World! 🌎️</p>',
     onUpdate: ({ editor }) => {

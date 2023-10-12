@@ -1,5 +1,8 @@
+import axios from 'axios'
 import { Slice } from '@tiptap/pm/model'
 import { EditorView } from '@tiptap/pm/view'
+
+const IMAGE_API = process.env.IMAGE_SERVICE_URL || 'http://localhost:80'
 
 export function imageDropHandler(
   view: EditorView,
@@ -9,7 +12,14 @@ export function imageDropHandler(
 ): boolean | undefined {
   // Define uploadImage function here
   const uploadImage = async (file: File): Promise<string> => {
-    return 'http://localhost:80/display?_id=650eda84c4bf25c4e827b1fd&collection=avatar'
+    const formData = new FormData()
+    formData.append('image', file)
+    const response = await axios.post(
+      `${IMAGE_API}/upload?collection=story`,
+      formData,
+      { headers: { 'Content-Type': 'multipart/form-data' } }
+    )
+    return `${IMAGE_API}/display?_id=${response.data.id}&collection=story`
   }
 
   // If dropping external files to the editor
@@ -37,21 +47,37 @@ export function imageDropHandler(
         } else {
           // Upload valid image
           try {
-            const response = uploadImage(droppedFile)
-            const coordinates = view.posAtCoords({
-              left: event.clientX,
-              top: event.clientY,
-            })
-            if (!coordinates) {
-              console.log('No coordinates')
-              return false
-            }
-            view.dispatch(
-              view.state.tr.insert(
-                coordinates.pos,
-                view.state.schema.nodes.image.create({ src: response })
+            /* const response = uploadImage(droppedFile) */
+            /* const coordinates = view.posAtCoords({ */
+            /*   left: event.clientX, */
+            /*   top: event.clientY, */
+            /* }) */
+            /* if (!coordinates) { */
+            /*   console.log('No coordinates') */
+            /*   return false */
+            /* } */
+            /* view.dispatch( */
+            /*   view.state.tr.insert( */
+            /*     coordinates.pos, */
+            /*     view.state.schema.nodes.image.create({ src: response }) */
+            /*   ) */
+            /* ) */
+            uploadImage(droppedFile).then((response) => {
+              const coordinates = view.posAtCoords({
+                left: event.clientX,
+                top: event.clientY,
+              })
+              if (!coordinates) {
+                console.log('No coordinates')
+                return false
+              }
+              view.dispatch(
+                view.state.tr.insert(
+                  coordinates.pos,
+                  view.state.schema.nodes.image.create({ src: response })
+                )
               )
-            )
+            })
           } catch (err) {
             console.log(err)
             return false
