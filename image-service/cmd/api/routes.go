@@ -10,10 +10,16 @@ func (a *App) routes() http.Handler {
 	// Declare a new router
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("/", a.home)
-	mux.HandleFunc("/upload", a.uploadImage)
-	mux.HandleFunc("/display", a.displayImage)
-    mux.HandleFunc("/delete", a.deleteImage)
+	// Use middleware for all routes
+	mux.Handle("/", a.middlewares(http.HandlerFunc(a.home)))
+	mux.Handle("/upload", a.middlewares(http.HandlerFunc(a.uploadImage)))
+	mux.Handle("/display", a.middlewares(http.HandlerFunc(a.displayImage)))
+	mux.Handle("/delete", a.middlewares(http.HandlerFunc(a.deleteImage)))
+
+	// mux.HandleFunc("/", a.home)
+	// mux.HandleFunc("/upload", a.uploadImage)
+	// mux.HandleFunc("/display", a.displayImage)
+	// mux.HandleFunc("/delete", a.deleteImage)
 
 	return mux
 }
