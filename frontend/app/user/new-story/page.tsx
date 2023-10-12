@@ -74,10 +74,14 @@ const Home = () => {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      ListItem,
-      OrderedList.configure({ HTMLAttributes: { class: 'list-decimal' } }),
-      BulletList.configure({ HTMLAttributes: { class: 'list-disc' } }),
+      StarterKit.configure({
+        orderedList: {
+          HTMLAttributes: { class: 'list-decimal' },
+        },
+        bulletList: {
+          HTMLAttributes: { class: 'list-disc' },
+        },
+      }),
       Image,
     ],
     editorProps: {
@@ -143,7 +147,6 @@ const Home = () => {
         <button onClick={() => handleSave()}>Save</button>
         <button onClick={() => handlePost()}>Post</button>
       </section>
-      <img src="http://localhost:80/display?_id=650eda84c4bf25c4e827b1fd&collection=avatar" />
     </div>
   )
 }
