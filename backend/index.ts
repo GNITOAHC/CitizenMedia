@@ -9,6 +9,19 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
+/* Use this when running on docker */
+/* mongoose */
+/*   .connect('mongodb://mongo:27017/CitizenMediaDB', { */
+/*     authSource: 'admin', */
+/*     user: 'root', */
+/*     pass: 'rootpassword', */
+/*   }) */
+/*   .then(() => console.log('Connecting to MongoDB')) */
+/*   .catch((e) => { */
+/*     console.log(e) */
+/*   }) */
+
+/* Use this when running on localhost */
 mongoose
   .connect('mongodb://127.0.0.1:27017/CitizenMediaDB')
   .then(() => console.log('Connecting to MongoDB'))
@@ -25,6 +38,12 @@ if (!JWT_SECRET || JWT_SECRET == '') {
 
 app.get('/', (_req, res) => {
   res.send('Hello World')
+})
+
+import axios from 'axios'
+app.get('/check-image-service', async (_req, res) => {
+  const response = await axios.get('http://image-service:80')
+  res.send(response.data)
 })
 
 import { authRoute } from './routes'
