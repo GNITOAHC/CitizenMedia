@@ -19,11 +19,11 @@ async function sendMail(email: string) {
 }
 
 export default function Home() {
+  const [email, setEmail] = useState('')
+
   /* Redirect to homepage if user is logged in */
   const { data: session } = useSession()
   if (session) return window.location.replace('/')
-
-  const [email, setEmail] = useState('')
 
   return (
     <div className="flex flex-col text-black">

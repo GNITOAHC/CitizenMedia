@@ -35,16 +35,16 @@ async function resetPass({ id, token, pass, confirm }: params) {
 }
 
 export default function Home() {
-  /* Redirect to homepage if user is logged in */
-  const { data: session } = useSession()
-  if (session) return window.location.replace('/')
-
   const query = useSearchParams()
   const id = query.get('id') ?? ''
   const token = query.get('token') ?? ''
 
   const [pass, setPass] = useState('')
   const [confirm, setConfirm] = useState('')
+
+  /* Redirect to homepage if user is logged in */
+  const { data: session } = useSession()
+  if (session) return window.location.replace('/')
 
   return (
     <section className="text-black h-screen flex flex-col gap-2 m-12">
