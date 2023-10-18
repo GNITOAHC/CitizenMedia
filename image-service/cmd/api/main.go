@@ -4,8 +4,10 @@ import (
 	"context"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -32,6 +34,12 @@ type MongoFields struct {
 func main() {
 	log.Println("Starting server on port", portNumber)
 
+	// Load the .env file
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
 	// Declare database client
 	client := connectToDB()
 	defer client.Disconnect(context.Background())
@@ -48,7 +56,7 @@ func main() {
 	}
 
 	// Start the server
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,7 +74,11 @@ func connectToDB() *mongo.Client {
 	// client, err := mongo.Connect(ctx, clientOptions)
 
 	// Use this for when running locally
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017/"))
+	// client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://127.0.0.1:27017/"))
+
+	// Connect to MongoDB Atlas
+	mongodbURI := os.Getenv("MONGODB_URI")
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongodbURI))
 
 	if err != nil {
 		log.Fatal(err)
