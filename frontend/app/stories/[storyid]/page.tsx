@@ -30,7 +30,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
     StoryServices.getStoryById(params.storyid).then((res) => {
       if (res && res.data != 'Story not found') setData(res.data)
     })
-  }, [])
+  }, [params.storyid])
 
   React.useEffect(() => {
     setContent(

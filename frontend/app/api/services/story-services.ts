@@ -39,4 +39,5 @@ class StoryServices {
   }
 }
 
-export default new StoryServices()
+const storyServices = new StoryServices()
+export default storyServices

@@ -1,5 +1,6 @@
 'use client'
 import React from 'react'
+import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 
 export default function Account() {
@@ -28,7 +29,7 @@ function UserImageAndName() {
   if (session && session.user) {
     return (
       <section className="flex flex-row">
-        <img
+        <Image
           src={session?.user.avatar as string}
           alt="user image"
           width={200}

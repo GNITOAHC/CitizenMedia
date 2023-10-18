@@ -3,11 +3,11 @@ import Link from 'next/link'
 
 interface SidebarItemProps {
   href: string
-  children: any
+  display: string
   setOpen: any
 }
 
-function SidebarItem({ href, children, setOpen }: SidebarItemProps) {
+function SidebarItem({ href, display, setOpen }: SidebarItemProps) {
   return (
     <li>
       <Link
@@ -15,7 +15,7 @@ function SidebarItem({ href, children, setOpen }: SidebarItemProps) {
         className="btn btn-primary"
         onClick={() => setOpen(false)}
       >
-        {children}
+        {display}
       </Link>
     </li>
   )
@@ -43,9 +43,9 @@ export default function Sidebar() {
         <label htmlFor="my-drawer-4" className="drawer-overlay"></label>
         <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
           {/* Sidebar content here */}
-          <SidebarItem href="/" setOpen={setOpen} children="Home" />
-          <SidebarItem href="/user" setOpen={setOpen} children="User" />
-          <SidebarItem href="/settings" setOpen={setOpen} children="Settings" />
+          <SidebarItem href="/" setOpen={setOpen} display="Home" />
+          <SidebarItem href="/user" setOpen={setOpen} display="User" />
+          <SidebarItem href="/settings" setOpen={setOpen} display="Settings" />
         </ul>
       </div>
     </div>

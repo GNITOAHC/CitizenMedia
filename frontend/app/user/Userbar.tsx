@@ -19,7 +19,7 @@ export default function Userbar() {
       })
     }
     getProfileLinks()
-  }, [status])
+  }, [status, session?.user.jwt_token])
 
   return (
     <div>
