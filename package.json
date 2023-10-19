@@ -8,6 +8,7 @@
     "build": "npm run build:frontend && npm run build:backend",
     "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run image-service\"",
     "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\" \"npm run image-service\"",
+    "server": "npm run start:backend && npm run image-service",
     "image-service": "cd image-service && go run ./cmd/api",
     "build:frontend": "cd frontend && npm install && npm run build",
     "build:backend": "cd backend && npm install && npm run build",
