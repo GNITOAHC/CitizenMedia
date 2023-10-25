@@ -9,6 +9,15 @@
   
   --color-btn-primary: #0F3E7A;
   --color-divider: #0F3E7A;
+
+  --color-topbar-btn: #515861;
+
+  /* Global Config */
+  --color-menu-blue: #426CA3;
+  --color-menu-yellow: #FFC342;
+  --color-menu-line: #24456D;
+  --color-newstories-line: #0F3E7A;
+  --color-story-block: #466D9E;
 }
 
 .dark {
@@ -17,6 +26,8 @@
 
   --color-btn-primary: #FFD37E;
   --color-divider: #FFFFFF;
+
+  --color-topbar-btn: #FFFFFF;
 }
 
 /* daisyui color configuration start */
