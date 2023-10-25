@@ -1,0 +1,21 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: ssh pull docker and start
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.HOST }}
+          username: root
+          password: ${{ secrets.DIGITAL_PASSWORD }}
+          script: |
+            ./start.sh

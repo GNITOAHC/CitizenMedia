@@ -2,17 +2,45 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+:root,
+.light {
+  --background-color: #FFFFFF;
+  --color-text-primary: #333333;
+  
+  --color-btn-primary: #0F3E7A;
+  --color-divider: #0F3E7A;
+
+  --color-topbar-btn: #515861;
+
+  /* Global Config */
+  --color-menu-blue: #426CA3;
+  --color-menu-yellow: #FFC342;
+  --color-menu-line: #24456D;
+  --color-newstories-line: #0F3E7A;
+  --color-story-block: #466D9E;
 }
 
 .dark {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: 78, 78, 78;
-  --background-end-rgb: 78, 78, 78;
+  --background-color: #4E4E4E;
+  --color-text-primary: #FFFFFF;
+
+  --color-btn-primary: #FFD37E;
+  --color-divider: #FFFFFF;
+
+  --color-topbar-btn: #FFFFFF;
 }
+
+/* daisyui color configuration start */
+
+.btn-primary {
+  color: var(--color-btn-primary);
+}
+
+.menu {
+  background: #426CA3
+}
+
+/* daisyui color configuration stop */
 
 /* @media (prefers-color-scheme: dark) { */
 /*   :root { */
@@ -23,11 +51,6 @@
 /* } */
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: var(--color-text-primary);
+  background: var(--background-color)
 }

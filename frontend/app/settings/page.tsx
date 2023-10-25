@@ -56,7 +56,7 @@ export default function Page() {
           Workspace
         </button>
       </section>
-      <hr />
+      <hr className="h-[3px] bg-divider mx-16 my-5" />
       {account === activeStyle && <Account />}
       {security === activeStyle && <Security />}
       {notification === activeStyle && <Notification />}
