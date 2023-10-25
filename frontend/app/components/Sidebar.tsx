@@ -6,11 +6,11 @@ import Logo from '../../public/logo-white.svg'
 
 interface SidebarItemProps {
   href: string
-  children: any
+  display: string
   setOpen: any
 }
 
-function SidebarItem({ href, children, setOpen }: SidebarItemProps) {
+function SidebarItem({ href, display, setOpen }: SidebarItemProps) {
   return (
     <li>
       <Link
@@ -18,7 +18,7 @@ function SidebarItem({ href, children, setOpen }: SidebarItemProps) {
         className="text-white text-xl font-normal"
         onClick={() => setOpen(false)}
       >
-        {children}
+        {display}
       </Link>
     </li>
   )
@@ -89,7 +89,7 @@ export default function Sidebar() {
           <div className="flex flex-col justify-end items-start h-40">
             <div className="flex justify-between w-full items-center">
               <div className="flex items-end h-full mb-3">
-                <img
+                <Image
                   src={session?.user?.avatar as string}
                   alt="here was a logo:("
                   width={30}
@@ -116,13 +116,13 @@ export default function Sidebar() {
               </div>
             </div>
           </div>
-          <SidebarItem href="/" setOpen={setOpen} children="Home" />
+          <SidebarItem href="/" setOpen={setOpen} display="Home" />
           <hr className="h-0.5 my-1 bg-menu_line border-0 dark:bg-gray-700 ml-4 mr-10"></hr>
-          <SidebarItem href="/user" setOpen={setOpen} children="User" />
+          <SidebarItem href="/user" setOpen={setOpen} display="User" />
           <hr className="h-0.5 my-1 bg-menu_line border-0 dark:bg-gray-700 ml-4 mr-10"></hr>
-          <SidebarItem href="/" setOpen={setOpen} children="Notifications" />
+          <SidebarItem href="/" setOpen={setOpen} display="Notifications" />
           <hr className="h-0.5 my-1 bg-menu_line border-0 dark:bg-gray-700 ml-4 mr-10"></hr>
-          <SidebarItem href="/settings" setOpen={setOpen} children="Settings" />
+          <SidebarItem href="/settings" setOpen={setOpen} display="Settings" />
           <hr className="h-0.5 my-1 bg-menu_line border-0 dark:bg-gray-700 ml-4 mr-10"></hr>
           <div className="flex items-center mt-3 ml-2">
             <button
