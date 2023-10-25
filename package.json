@@ -1,0 +1,26 @@
+{
+  "name": "citizenmedia",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:frontend && npm run build:backend",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\" \"npm run image-service\"",
+    "start": "concurrently \"npm run start:frontend\" \"npm run start:backend\" \"npm run image-service\"",
+    "server": "concurrently \"npm run start:backend\" \"npm run image-service\"",
+    "image-service": "cd image-service && go run ./cmd/api",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "build:backend": "cd backend && npm install && npm run build",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "start:frontend": "cd frontend && npm run start",
+    "start:backend": "cd backend && npm run start"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.1"
+  }
+}
+

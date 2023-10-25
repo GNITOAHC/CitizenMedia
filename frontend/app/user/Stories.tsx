@@ -24,16 +24,17 @@ async function myStories(jwt_token: string) {
 
 export default function Stories({ className }: { className: string }) {
   const { data: session } = useSession()
-  if (!session) return <div>loading...</div>
-  if (!session.user) return <div>loading...</div>
 
   const [data, setData] = React.useState<Story[]>([])
 
   React.useEffect(() => {
-    myStories(session.user.jwt_token as string).then((res) => {
+    myStories(session?.user.jwt_token as string).then((res) => {
       if (res) setData(res)
     })
-  }, [])
+  }, [session])
+
+  if (!session) return <div>loading...</div>
+  if (!session.user) return <div>loading...</div>
 
   return (
     <div className={`${className} overscroll-auto`}>

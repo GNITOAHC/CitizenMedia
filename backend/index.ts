@@ -1,5 +1,5 @@
 import express from 'express'
-import mongoose from 'mongoose'
+/* import mongoose from 'mongoose' */
 import cors from 'cors'
 require('module-alias/register') // Required for module aliasing
 const app = express()
@@ -9,12 +9,8 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 
-mongoose
-  .connect('mongodb://127.0.0.1:27017/CitizenMediaDB')
-  .then(() => console.log('Connecting to MongoDB'))
-  .catch((e) => {
-    console.log(e)
-  })
+/* Connect to the MongoDB database */
+require('./database')
 
 /* Get the JWT_SECRET from the .env file and export it */
 import 'dotenv/config'

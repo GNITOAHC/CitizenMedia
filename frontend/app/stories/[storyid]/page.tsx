@@ -3,13 +3,8 @@
 import React from 'react'
 import { StoryServices } from '@/api/services'
 import { generateHTML } from '@tiptap/html'
-import Document from '@tiptap/extension-document'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
 import StarterKit from '@tiptap/starter-kit'
-import ListItem from '@tiptap/extension-list-item'
-import OrderedList from '@tiptap/extension-ordered-list'
-import BulletList from '@tiptap/extension-bullet-list'
+import Image from '@tiptap/extension-image'
 import parse from 'html-react-parser'
 
 // Use CSS Modules to style story body component
@@ -35,7 +30,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
     StoryServices.getStoryById(params.storyid).then((res) => {
       if (res && res.data != 'Story not found') setData(res.data)
     })
-  }, [])
+  }, [params.storyid])
 
   React.useEffect(() => {
     setContent(
@@ -44,15 +39,7 @@ export default function Home({ params }: { params: { storyid: string } }) {
           data?.content ??
             '{"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Loading..."}]}]}'
         ),
-        [
-          Document,
-          Paragraph,
-          Text,
-          StarterKit,
-          ListItem,
-          OrderedList,
-          BulletList,
-        ]
+        [StarterKit, Image]
       )
     )
   }, [data?.content])

@@ -10,4 +10,5 @@ class UserServices {
   }
 }
 
-export default new UserServices()
+const userServices = new UserServices()
+export default userServices

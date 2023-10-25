@@ -13,6 +13,7 @@ interface IUser {
   avatar: string
   jwt_token: string
   id: string
+  login_type: LoginType
 }
 
 const router = express.Router()
@@ -66,6 +67,7 @@ router.post('/google', async (req, res) => {
       avatar: data['picture'],
       jwt_token: jwt_token,
       id: foundUser?._id,
+      login_type: LoginType.GOOGLE,
     }
     return res.status(200).send(user)
   } else {
@@ -111,6 +113,7 @@ router.post('/credentials', async (req, res) => {
       avatar: foundUser?.avatar as string,
       jwt_token: jwt_token,
       id: foundUser?._id as string,
+      login_type: LoginType.CREDENTIALS,
     }
 
     return res.status(200).send(user)
