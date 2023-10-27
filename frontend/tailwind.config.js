@@ -12,18 +12,18 @@ module.exports = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      colors: {
+        divider: 'var(--color-divider)',
+        menu_blue: 'var(--color-menu-blue)',
+        topbar_button: 'var(--color-topbar-btn)',
+        menu_yellow: 'var(--color-menu-yellow)',
+        menu_line: 'var(--color-menu-line)',
+        newstories_line: 'var(--color-newstories-line)',
+        storyblock: 'var(--color-storyblock)',
+      },
     },
     boxShadow: {
       blue: '0px 2px 4px 0px rgba(15, 62, 122, 0.60)',
-    },
-    colors: {
-      divider: 'var(--color-divider)',
-      menu_blue: 'var(--color-menu-blue)',
-      topbar_button: 'var(--color-topbar-btn)',
-      menu_yellow: 'var(--color-menu-yellow)',
-      menu_line: 'var(--color-menu-line)',
-      newstories_line: 'var(--color-newstories-line)',
-      storyblock: 'var(--color-storyblock)',
     },
     height: {
       0.5: '0.125rem',
