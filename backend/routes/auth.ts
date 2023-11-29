@@ -11,9 +11,9 @@ interface IUser {
   name: string
   email: string
   avatar: string
-  jwt_token: string
+  jwtToken: string
   id: string
-  login_type: LoginType
+  loginType: LoginType
 }
 
 const router = express.Router()
@@ -65,9 +65,9 @@ router.post('/google', async (req, res) => {
       name: data['name'],
       email: data['email'],
       avatar: data['picture'],
-      jwt_token: jwt_token,
+      jwtToken: jwt_token,
       id: foundUser?._id,
-      login_type: LoginType.GOOGLE,
+      loginType: LoginType.GOOGLE,
     }
     return res.status(200).send(user)
   } else {
@@ -97,7 +97,7 @@ router.post('/credentials', async (req, res) => {
     }
 
     /* Create JWT token */
-    const jwt_token = jwt.sign(
+    const jwtToken = jwt.sign(
       {
         name: foundUser?.username,
         email: foundUser?.email,
@@ -111,9 +111,9 @@ router.post('/credentials', async (req, res) => {
       name: foundUser?.username as string,
       email: foundUser?.email as string,
       avatar: foundUser?.avatar as string,
-      jwt_token: jwt_token,
+      jwtToken: jwtToken,
       id: foundUser?._id as string,
-      login_type: LoginType.CREDENTIALS,
+      loginType: LoginType.CREDENTIALS,
     }
 
     return res.status(200).send(user)
